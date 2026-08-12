@@ -1,0 +1,90 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'Inter', sans-serif;
+  --color-primary-green: #16C784;
+  --color-primary-navy: #081B3A;
+  --color-secondary-blue: #4A8CFF;
+  --color-accent-orange: #FF9D27;
+  --color-accent-purple: #6A5AF9;
+  --color-secondary-bg: #F8FAFC;
+  --color-border: #E5E7EB;
+  --color-card: #FFFFFF;
+  --color-text-primary: #081B3A;
+  --color-text-secondary: #5B6374;
+  
+  --shadow-enterprise: 0 10px 40px -10px rgba(0,0,0,0.08);
+  --shadow-enterprise-hover: 0 20px 40px -10px rgba(0,0,0,0.12);
+  --radius-xl: 20px;
+}
+
+@layer base {
+  body {
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    color: var(--color-text-primary);
+    background-color: white;
+  }
+  section {
+    scroll-margin-top: 90px;
+  }
+}
+
+@utility glass-card {
+  background-color: rgb(255 255 255 / 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgb(255 255 255 / 0.2);
+  box-shadow: var(--shadow-enterprise);
+}
+
+@utility green-gradient-text {
+  color: transparent;
+  background-clip: text;
+  background-image: linear-gradient(to right, var(--color-primary-green), #0ea5e9);
+}
+
+@layer utilities {
+  .container-wide {
+    width: calc(100% - 64px);
+    margin-inline: auto;
+  }
+
+  @media (max-width: 1024px) {
+    .container-wide {
+      width: calc(100% - 48px);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .container-wide {
+      width: calc(100% - 32px);
+    }
+  }
+
+  .container-hero {
+    width: calc(100% - 64px);
+    margin-inline: auto;
+  }
+
+  @media (max-width: 1024px) {
+    .container-hero {
+      width: calc(100% - 48px);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .container-hero {
+      width: calc(100% - 32px);
+    }
+  }
+
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
