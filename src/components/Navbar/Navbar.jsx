@@ -44,13 +44,13 @@ const Navbar = () => {
           {/* Logo */}
           <div className="flex items-center h-full flex-shrink-0">
             <a href="#" className="flex flex-col">
-              <span className="text-[35px] font-[900] text-primary-navy tracking-tight leading-none relative">
+              <span className="text-[24px] font-[900] text-primary-navy tracking-tight leading-none relative">
                 iQuadra
-                <svg className="absolute -top-1.5 -right-3.5 w-4 h-4 text-primary-green fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <svg className="absolute -top-1 -right-2.5 w-3 h-3 text-primary-green fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                   <path d="M2.5,21.5 L21.5,2.5 L14.5,21.5 L10.5,13.5 Z" />
                 </svg>
               </span>
-              <span className="text-[10px] text-gray-500 font-[600] tracking-wide mt-0.5">AI. Anywhere. Everywhere.</span>
+              <span className="text-[7px] text-gray-500 font-[600] tracking-wide mt-0.5">AI. Anywhere. Everywhere.</span>
             </a>
           </div>
 
@@ -67,13 +67,32 @@ const Navbar = () => {
           </nav>
 
           {/* Right Side Actions */}
-          <div className="hidden lg:flex items-center space-x-4 flex-shrink-0">
+          <div className="hidden lg:flex items-center gap-[16px] flex-shrink-0">
             <a href="#" className="flex items-center text-[14px] font-[600] text-primary-navy bg-white border border-primary-green/30 rounded-lg px-4 py-2 hover:border-primary-green hover:bg-primary-green/5 transition-colors">
               <Lock className="w-[16px] h-[16px] mr-2 text-primary-navy" strokeWidth={2} />
               Employee Login
             </a>
-            <Button variant="solid" className="py-1 px-6 text-[15px] font-[600] rounded-lg bg-primary-green hover:bg-green-600 shadow-[0_4px_14px_0_rgba(22,199,132,0.39)]">
-              Talk to Our AI Team &rarr;
+            <Button
+              variant="solid"
+              className="
+                !h-[40px]
+                !min-h-[40px]
+                !px-[17px]
+                !py-0
+                !text-[12px]
+                !font-[600]
+                !leading-none
+                !rounded-[7px]
+                bg-primary-green
+                hover:bg-green-600
+                shadow-[0_3px_10px_rgba(22,199,132,0.25)]
+                whitespace-nowrap
+                flex
+                items-center
+                justify-center
+              "
+            >
+              Talk to Our AI Team →
             </Button>
           </div>
 
