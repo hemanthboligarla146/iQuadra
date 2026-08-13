@@ -22,14 +22,14 @@ const IconWrapper = ({ iconName }) => {
   const IconComponent = iconMap[iconName] || Icons.Circle;
   const blueIcons = ['cloud', 'code', 'pie-chart', 'activity', 'server'];
   const colorClass = blueIcons.includes(iconName) ? 'text-secondary-blue' : 'text-primary-green';
-  
+
   return <IconComponent className={`w-[18px] h-[18px] ${colorClass} mb-1.5`} strokeWidth={1.5} />;
 };
 
 const ServicesBar = () => {
   return (
     <div className="w-full border-y border-gray-100 bg-white py-3 overflow-hidden relative">
-      <div className="w-full px-4 md:px-[80px] mx-auto max-w-[1920px] overflow-x-auto hide-scrollbar">
+      <div className="w-full px-4 md:px-[55px] mx-auto max-w-[1920px] overflow-x-auto hide-scrollbar">
         <div className="flex items-center justify-between w-full min-w-[1000px]">
           {servicesData.map((service, index) => (
             <React.Fragment key={index}>
