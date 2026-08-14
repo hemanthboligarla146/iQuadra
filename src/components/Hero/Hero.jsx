@@ -1,21 +1,34 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect, useRef } from 'react';
+import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import Button from '../Common/Button';
 
-const FloatingCard = ({ icon, text, delay, position }) => {
+const FloatingCard = ({ id, icon, text, delay, position, isHovered, isActive, onHover, onLeave, onClick }) => {
   const duration = 5 + (delay % 3); // Map delay to a 5-8s duration pseudo-randomly
   return (
     <motion.div
+      onMouseEnter={() => onHover(id)}
+      onMouseLeave={onLeave}
+      onClick={() => onClick(id)}
       initial={{ opacity: 0, scale: 0.8 }}
-      animate={{ opacity: 1, scale: 1, y: [0, -3, 0] }}
+      animate={{ 
+        opacity: 1, 
+        scale: isActive ? 1.05 : isHovered ? 1.02 : 1, 
+        y: (isActive || isHovered) ? -4 : [0, -3, 0],
+        boxShadow: isActive 
+          ? '0 12px 30px -5px rgba(22, 199, 132, 0.15)' 
+          : isHovered 
+            ? '0 10px 25px -5px rgba(0, 0, 0, 0.08)' 
+            : '0 8px 20px -5px rgba(0,0,0,0.05)'
+      }}
       transition={{
         opacity: { duration: 0.8, delay, ease: "easeOut" },
-        scale: { duration: 0.8, delay, ease: "easeOut" },
-        y: { duration: duration, repeat: Infinity, ease: "easeInOut", delay }
+        scale: { type: "spring", stiffness: 300, damping: 20 },
+        y: (isActive || isHovered) ? { type: "spring", stiffness: 300, damping: 20 } : { duration: duration, repeat: Infinity, ease: "easeInOut", delay },
+        boxShadow: { duration: 0.3 }
       }}
-      className={`absolute ${position} flex items-center bg-white px-5 py-3 rounded-full shadow-[0_8px_20px_-5px_rgba(0,0,0,0.05)] border border-gray-100 z-30`}
+      className={`absolute ${position} flex items-center bg-white px-5 py-3 rounded-full border ${isActive ? 'border-[#16C784]' : isHovered ? 'border-gray-200' : 'border-gray-100'} z-30 cursor-pointer transition-colors duration-300`}
     >
-      <div className="w-10 h-10 rounded-full bg-[#f8fafc] border border-[#f1f5f9] flex items-center justify-center mr-3 shrink-0">
+      <div className={`w-10 h-10 rounded-full ${isActive ? 'bg-[#16C784]/10 border-[#16C784]/30' : 'bg-[#f8fafc] border-[#f1f5f9]'} flex items-center justify-center mr-3 shrink-0 transition-colors duration-300`}>
         {icon}
       </div>
       <span className="text-[13.5px] font-[600] text-primary-navy leading-[1.25] whitespace-pre-line">
@@ -25,9 +38,108 @@ const FloatingCard = ({ icon, text, delay, position }) => {
   );
 };
 
+const NODES = [
+  { id: 'ai-platforms', side: 'left', y: 100 },
+  { id: 'oracle-erp', side: 'left', y: 300 },
+  { id: 'data-sciences', side: 'left', y: 500 },
+  { id: 'full-stack', side: 'right', y: 100 },
+  { id: 'devops', side: 'right', y: 300 },
+  { id: 'safe-agile', side: 'right', y: 500 },
+];
+
 const Hero = () => {
+  const containerRef = useRef(null);
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
+  const [hoveredNode, setHoveredNode] = useState(null);
+  const [activeNode, setActiveNode] = useState(null);
+  const clickTimeoutRef = useRef(null);
+
+  useEffect(() => {
+    setIsTouchDevice(window.matchMedia('(pointer: coarse)').matches);
+    return () => {
+      if (clickTimeoutRef.current) clearTimeout(clickTimeoutRef.current);
+    };
+  }, []);
+
+  // Mouse tracking
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  const cursorX = useMotionValue(-100);
+  const cursorY = useMotionValue(-100);
+
+  const springConfig = { damping: 25, stiffness: 150 };
+  const smoothMouseX = useSpring(mouseX, springConfig);
+  const smoothMouseY = useSpring(mouseY, springConfig);
+  
+  const cursorSmoothX = useSpring(cursorX, { damping: 25, stiffness: 700, mass: 0.1 });
+  const cursorSmoothY = useSpring(cursorY, { damping: 25, stiffness: 700, mass: 0.1 });
+
+  // Parallax calculations (very subtle: 2-8px)
+  const coreX = useTransform(smoothMouseX, [-1, 1], [-2, 2]);
+  const coreY = useTransform(smoothMouseY, [-1, 1], [-2, 2]);
+  
+  const networkX = useTransform(smoothMouseX, [-1, 1], [-5, 5]);
+  const networkY = useTransform(smoothMouseY, [-1, 1], [-5, 5]);
+
+  const handleMouseMove = (e) => {
+    if (isTouchDevice || !containerRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
+    
+    // Normalize -1 to 1
+    const px = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+    const py = ((e.clientY - rect.top) / rect.height) * 2 - 1;
+    mouseX.set(px);
+    mouseY.set(py);
+
+    // Absolute cursor within container
+    cursorX.set(e.clientX - rect.left);
+    cursorY.set(e.clientY - rect.top);
+  };
+
+  const handleMouseLeave = () => {
+    if (isTouchDevice) return;
+    mouseX.set(0);
+    mouseY.set(0);
+    cursorX.set(-100);
+    cursorY.set(-100);
+  };
+
+  const handleNodeClick = (id) => {
+    if (clickTimeoutRef.current) clearTimeout(clickTimeoutRef.current);
+    setActiveNode(id);
+    // Smooth settle back
+    clickTimeoutRef.current = setTimeout(() => {
+      setActiveNode(null);
+    }, 1200);
+  };
+
+  const ambientOpacity = activeNode ? 0.3 : hoveredNode ? 0.6 : 1;
+  const cursorOpacity = useTransform(cursorX, (x) => x === -100 ? 0 : 1);
+
   return (
-    <section className="relative pt-[30px] pb-[0px] overflow-hidden bg-white">
+    <section 
+      ref={containerRef}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      className={`relative pt-[30px] pb-[0px] overflow-hidden bg-white ${!isTouchDevice ? '[&_svg]:cursor-none' : ''}`}
+    >
+      {/* Custom Cursor */}
+      {!isTouchDevice && (
+        <motion.div
+          style={{
+            x: cursorSmoothX,
+            y: cursorSmoothY,
+            translateX: "-50%",
+            translateY: "-50%",
+            scale: activeNode ? 0.7 : hoveredNode ? 1.3 : 1,
+            opacity: cursorOpacity
+          }}
+          className="pointer-events-none absolute top-0 left-0 z-[100] transition-transform duration-200 drop-shadow-[0_0_8px_rgba(22,199,132,0.8)]"
+        >
+          <img src="/robo-cursor.png" alt="robot cursor" className="w-20 h-20 object-contain" />
+        </motion.div>
+      )}
+
       {/* Background radial glow */}
       <motion.div
         animate={{ opacity: [0.3, 0.6, 0.3] }}
@@ -35,9 +147,9 @@ const Hero = () => {
         className="absolute top-1/2 right-[10%] -translate-y-1/2 w-[800px] h-[800px] bg-[#16C784]/5 rounded-full blur-[100px] -z-10"
       />
 
-      <div className="w-full px-8 md:px-[80px] mx-auto max-w-[1920px] grid grid-cols-1 lg:grid-cols-[minmax(420px,0.85fr)_minmax(700px,1.35fr)] gap-8 items-center">
+      <div className="w-full px-8 md:px-[80px] mx-auto max-w-[1920px] grid grid-cols-1 lg:grid-cols-[minmax(420px,0.85fr)_minmax(700px,1.35fr)] gap-8 items-center relative z-20">
         {/* Left Content */}
-        <div className="z-20 relative pt-10">
+        <div className="z-20 relative pt-10 pointer-events-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -80,10 +192,10 @@ const Hero = () => {
 
         {/* Right Content - Complex SVG Graphic */}
         <div className="relative h-[480px] lg:h-[625px] w-full max-w-[900px] mx-auto flex items-center justify-center overflow-visible">
-          <div className="relative w-full aspect-square md:aspect-auto md:h-full flex items-center justify-center">
+          <div className="relative w-full aspect-square md:aspect-auto md:h-full flex items-center justify-center pointer-events-none [&_>_div]:pointer-events-auto">
 
             {/* SVG Network Cloud */}
-            <svg viewBox="0 0 800 600" className="absolute inset-0 w-full h-full object-visible overflow-visible z-0" xmlns="http://www.w3.org/2000/svg">
+            <motion.svg style={{ x: networkX, y: networkY }} viewBox="0 0 800 600" className="absolute inset-0 w-full h-full object-visible overflow-visible z-0 pointer-events-auto" xmlns="http://www.w3.org/2000/svg">
               <defs>
                 <linearGradient id="streamGradDenseLeft" x1="100%" y1="0%" x2="0%" y2="0%">
                   <stop offset="0%" stopColor="#4A8CFF" stopOpacity="0.8" />
@@ -106,196 +218,258 @@ const Hero = () => {
                 </filter>
               </defs>
 
-              {/* Elliptical Globe Mesh Behind (Longitude lines) */}
-              <g opacity="0.12">
-                {[...Array(24)].map((_, i) => {
-                  const angle = (i / 24) * Math.PI;
-                  const rx = 240 * Math.cos(angle);
-                  return (
-                    <ellipse
-                      key={`sphere-v-${i}`}
-                      cx="400" cy="300"
-                      rx={Math.abs(rx)} ry="180"
-                      fill="none" stroke="#4A8CFF" strokeWidth="0.4"
-                      strokeDasharray="2 6"
-                    />
-                  );
-                })}
-              </g>
-              {/* Elliptical Globe Mesh Behind (Latitude lines) */}
-              <g opacity="0.12">
-                {[...Array(16)].map((_, i) => {
-                  const angle = (i / 16) * Math.PI;
-                  const ry = 180 * Math.cos(angle);
-                  return (
-                    <ellipse
-                      key={`sphere-h-${i}`}
-                      cx="400" cy="300"
-                      rx="240" ry={Math.abs(ry)}
-                      fill="none" stroke="#4A8CFF" strokeWidth="0.4"
-                      strokeDasharray="2 6"
-                    />
-                  );
-                })}
-              </g>
+              {/* Ambient Network Container */}
+              <motion.g animate={{ opacity: ambientOpacity }} transition={{ duration: 0.5 }}>
+                {/* Elliptical Globe Mesh Behind (Longitude lines) */}
+                <g opacity="0.25">
+                  {[...Array(24)].map((_, i) => {
+                    const angle = (i / 24) * Math.PI;
+                    const rx = 240 * Math.cos(angle);
+                    return (
+                      <ellipse
+                        key={`sphere-v-${i}`}
+                        cx="400" cy="300"
+                        rx={Math.abs(rx)} ry="180"
+                        fill="none" stroke="#4A8CFF" strokeWidth="0.6"
+                        strokeDasharray="2 6"
+                      />
+                    );
+                  })}
+                </g>
+                {/* Elliptical Globe Mesh Behind (Latitude lines) */}
+                <g opacity="0.25">
+                  {[...Array(16)].map((_, i) => {
+                    const angle = (i / 16) * Math.PI;
+                    const ry = 180 * Math.cos(angle);
+                    return (
+                      <ellipse
+                        key={`sphere-h-${i}`}
+                        cx="400" cy="300"
+                        rx="240" ry={Math.abs(ry)}
+                        fill="none" stroke="#4A8CFF" strokeWidth="0.6"
+                        strokeDasharray="2 6"
+                      />
+                    );
+                  })}
+                </g>
 
-              {/* Left Flare Web - Smooth S-Curve Stream */}
-              <g opacity="0.8">
-                {[...Array(150)].map((_, i) => {
-                  const progress = i / 149;
-                  // Spread start evenly behind the orb
-                  const startY = 300 + (progress - 0.5) * 160;
-                  // Spread end smoothly to cards
-                  const endY = 300 + (progress - 0.5) * 440;
+                {/* Left Flare Web - Smooth S-Curve Stream */}
+                <g opacity="0.8">
+                  {[...Array(150)].map((_, i) => {
+                    const progress = i / 149;
+                    const startY = 300 + (progress - 0.5) * 160;
+                    const endY = 300 + (progress - 0.5) * 440;
+                    const cp1x = 280;
+                    const cp1y = startY;
+                    const cp2x = 100;
+                    const cp2y = endY;
+                    return (
+                      <motion.path
+                        key={`left-flare-${i}`}
+                        d={`M400,${startY} C${cp1x},${cp1y} ${cp2x},${cp2y} 0,${endY}`}
+                        fill="none"
+                        stroke="url(#streamGradDenseLeft)"
+                        strokeWidth={Math.random() > 0.8 ? "1.5" : "0.5"}
+                        initial={{ strokeDasharray: "0 1200", strokeDashoffset: 1200 }}
+                        animate={{ strokeDasharray: ["0 1200", "600 1200", "0 1200"], strokeDashoffset: [1200, 600, 0] }}
+                        transition={{ duration: 10 + Math.random() * 8, repeat: Infinity, ease: "linear", delay: 2.5 + Math.random() * 2.5 }}
+                      />
+                    );
+                  })}
+                </g>
 
-                  // Classic S-curve for horizontal flow
-                  const cp1x = 280;
-                  const cp1y = startY;
-                  const cp2x = 100;
-                  const cp2y = endY;
-                  return (
-                    <motion.path
-                      key={`left-flare-${i}`}
-                      d={`M400,${startY} C${cp1x},${cp1y} ${cp2x},${cp2y} 0,${endY}`}
-                      fill="none"
-                      stroke="url(#streamGradDenseLeft)"
-                      strokeWidth={Math.random() > 0.8 ? "1.5" : "0.5"}
-                      initial={{ strokeDasharray: "0 1200", strokeDashoffset: 1200 }}
-                      animate={{ strokeDasharray: ["0 1200", "600 1200", "0 1200"], strokeDashoffset: [1200, 600, 0] }}
-                      transition={{ duration: 10 + Math.random() * 8, repeat: Infinity, ease: "linear", delay: 2.5 + Math.random() * 2.5 }}
-                    />
-                  );
-                })}
-              </g>
+                {/* Right Flare Web - Smooth S-Curve Stream */}
+                <g opacity="0.8">
+                  {[...Array(150)].map((_, i) => {
+                    const progress = i / 149;
+                    const startY = 300 + (progress - 0.5) * 160;
+                    const endY = 300 + (progress - 0.5) * 440;
+                    const cp1x = 520;
+                    const cp1y = startY;
+                    const cp2x = 700;
+                    const cp2y = endY;
+                    return (
+                      <motion.path
+                        key={`right-flare-${i}`}
+                        d={`M400,${startY} C${cp1x},${cp1y} ${cp2x},${cp2y} 800,${endY}`}
+                        fill="none"
+                        stroke="url(#streamGradDenseRight)"
+                        strokeWidth={Math.random() > 0.8 ? "1.5" : "0.5"}
+                        initial={{ strokeDasharray: "0 1200", strokeDashoffset: -1200 }}
+                        animate={{ strokeDasharray: ["0 1200", "600 1200", "0 1200"], strokeDashoffset: [-1200, -600, 0] }}
+                        transition={{ duration: 10 + Math.random() * 8, repeat: Infinity, ease: "linear", delay: Math.random() * 2.5 }}
+                      />
+                    );
+                  })}
+                </g>
 
-              {/* Right Flare Web - Smooth S-Curve Stream */}
-              <g opacity="0.8">
-                {[...Array(150)].map((_, i) => {
-                  const progress = i / 149;
-                  const startY = 300 + (progress - 0.5) * 160;
-                  const endY = 300 + (progress - 0.5) * 440;
+                {/* Dense Woven Background Mesh (Static) */}
+                <g opacity="0.25">
+                  {[...Array(80)].map((_, i) => {
+                    const progress = i / 79;
+                    const startY = 300 + (progress - 0.5) * 320;
+                    const endY = 300 + (progress - 0.5) * 600;
+                    return (
+                      <path
+                        key={`bg-mesh-l-${i}`}
+                        d={`M400,${startY} C300,${startY} 100,${endY} 0,${endY}`}
+                        fill="none" stroke="url(#streamGradDenseLeft)" strokeWidth="0.3"
+                      />
+                    );
+                  })}
+                  {[...Array(80)].map((_, i) => {
+                    const progress = i / 79;
+                    const startY = 300 + (progress - 0.5) * 320;
+                    const endY = 300 + (progress - 0.5) * 600;
+                    return (
+                      <path
+                        key={`bg-mesh-r-${i}`}
+                        d={`M400,${startY} C500,${startY} 700,${endY} 800,${endY}`}
+                        fill="none" stroke="url(#streamGradDenseRight)" strokeWidth="0.3"
+                      />
+                    );
+                  })}
+                </g>
 
-                  const cp1x = 520;
-                  const cp1y = startY;
-                  const cp2x = 700;
-                  const cp2y = endY;
-                  return (
-                    <motion.path
-                      key={`right-flare-${i}`}
-                      d={`M400,${startY} C${cp1x},${cp1y} ${cp2x},${cp2y} 800,${endY}`}
-                      fill="none"
-                      stroke="url(#streamGradDenseRight)"
-                      strokeWidth={Math.random() > 0.8 ? "1.5" : "0.5"}
-                      initial={{ strokeDasharray: "0 1200", strokeDashoffset: -1200 }}
-                      animate={{ strokeDasharray: ["0 1200", "600 1200", "0 1200"], strokeDashoffset: [-1200, -600, 0] }}
-                      transition={{ duration: 10 + Math.random() * 8, repeat: Infinity, ease: "linear", delay: Math.random() * 2.5 }}
-                    />
-                  );
-                })}
-              </g>
+                {/* Particles Anchored to the S-Curves */}
+                <g>
+                  {[...Array(120)].map((_, i) => {
+                    const isLeft = i % 2 === 0;
+                    const progress = Math.random();
+                    const startY = 300 + (progress - 0.5) * 160;
+                    const endY = 300 + (progress - 0.5) * 440;
+                    const t = Math.random() * 0.8 + 0.1;
+                    const startX = 400;
+                    const cp1x = isLeft ? 280 : 520;
+                    const cp1y = startY;
+                    const cp2x = isLeft ? 100 : 700;
+                    const cp2y = endY;
+                    const finalX = isLeft ? 0 : 800;
+                    const finalY = endY;
+                    const x = Math.pow(1 - t, 3) * startX + 3 * Math.pow(1 - t, 2) * t * cp1x + 3 * (1 - t) * Math.pow(t, 2) * cp2x + Math.pow(t, 3) * finalX;
+                    const y = Math.pow(1 - t, 3) * startY + 3 * Math.pow(1 - t, 2) * t * cp1y + 3 * (1 - t) * Math.pow(t, 2) * cp2y + Math.pow(t, 3) * finalY;
 
-              {/* Dense Woven Background Mesh (Static) */}
-              <g opacity="0.25">
-                {[...Array(80)].map((_, i) => {
-                  const progress = i / 79;
-                  const startY = 300 + (progress - 0.5) * 320;
-                  const endY = 300 + (progress - 0.5) * 600;
-                  return (
-                    <path
-                      key={`bg-mesh-l-${i}`}
-                      d={`M400,${startY} C300,${startY} 100,${endY} 0,${endY}`}
-                      fill="none" stroke="url(#streamGradDenseLeft)" strokeWidth="0.3"
-                    />
-                  );
-                })}
-                {[...Array(80)].map((_, i) => {
-                  const progress = i / 79;
-                  const startY = 300 + (progress - 0.5) * 320;
-                  const endY = 300 + (progress - 0.5) * 600;
-                  return (
-                    <path
-                      key={`bg-mesh-r-${i}`}
-                      d={`M400,${startY} C500,${startY} 700,${endY} 800,${endY}`}
-                      fill="none" stroke="url(#streamGradDenseRight)" strokeWidth="0.3"
-                    />
-                  );
-                })}
-              </g>
+                    return (
+                      <motion.circle
+                        key={`dot-${i}`}
+                        cx={x} cy={y} r={Math.random() > 0.8 ? 2.5 : 1.5}
+                        fill={Math.random() > 0.65 ? "#16C784" : "#4A8CFF"}
+                        filter="url(#glowSubtle)"
+                        opacity={0.4 + Math.random() * 0.6}
+                        animate={{ opacity: [0.2, 0.9, 0.2], scale: [0.8, 1.5, 0.8] }}
+                        transition={{ duration: 3 + Math.random() * 4, repeat: Infinity, ease: "easeInOut", delay: (isLeft ? 2.5 : 0) + Math.random() * 2.5 }}
+                      />
+                    );
+                  })}
+                </g>
+              </motion.g>
 
-              {/* Particles / Nodes Perfectly Anchored to the S-Curves */}
+              {/* 6 Primary Interactive Connection Paths */}
               <g>
-                {[...Array(120)].map((_, i) => {
-                  const isLeft = i % 2 === 0;
-                  const progress = Math.random();
-
-                  const startY = 300 + (progress - 0.5) * 160;
-                  const endY = 300 + (progress - 0.5) * 440;
-                  const t = Math.random() * 0.8 + 0.1;
-
+                {NODES.map((node) => {
+                  const isNodeHovered = hoveredNode === node.id;
+                  const isNodeActive = activeNode === node.id;
                   const startX = 400;
-                  const cp1x = isLeft ? 280 : 520;
-                  const cp1y = startY;
-                  const cp2x = isLeft ? 100 : 700;
+                  const startY = 300;
+                  const endX = node.side === 'left' ? 0 : 800;
+                  const endY = node.y;
+                  const cp1x = node.side === 'left' ? 280 : 520;
+                  const cp1y = 300;
+                  const cp2x = node.side === 'left' ? 100 : 700;
                   const cp2y = endY;
-                  const finalX = isLeft ? 0 : 800;
-                  const finalY = endY;
-
-                  // Bezier interpolation
-                  const x = Math.pow(1 - t, 3) * startX + 3 * Math.pow(1 - t, 2) * t * cp1x + 3 * (1 - t) * Math.pow(t, 2) * cp2x + Math.pow(t, 3) * finalX;
-                  const y = Math.pow(1 - t, 3) * startY + 3 * Math.pow(1 - t, 2) * t * cp1y + 3 * (1 - t) * Math.pow(t, 2) * cp2y + Math.pow(t, 3) * finalY;
-
+                  
+                  const d = `M${startX},${startY} C${cp1x},${cp1y} ${cp2x},${cp2y} ${endX},${endY}`;
+                  const isActiveState = isNodeHovered || isNodeActive;
+                  
                   return (
-                    <motion.circle
-                      key={`dot-${i}`}
-                      cx={x} cy={y} r={Math.random() > 0.8 ? 2.5 : 1.5}
-                      fill={Math.random() > 0.65 ? "#16C784" : "#4A8CFF"}
-                      filter="url(#glowSubtle)"
-                      opacity={0.4 + Math.random() * 0.6}
-                      animate={{ opacity: [0.2, 0.9, 0.2], scale: [0.8, 1.5, 0.8] }}
-                      transition={{ duration: 3 + Math.random() * 4, repeat: Infinity, ease: "easeInOut", delay: (isLeft ? 2.5 : 0) + Math.random() * 2.5 }}
-                    />
+                    <g key={`primary-path-${node.id}`}>
+                      {/* Flowing Energy Particle */}
+                      <motion.path
+                        d={d}
+                        fill="none"
+                        stroke={isNodeActive ? "#16C784" : "#FFFFFF"}
+                        strokeWidth={isNodeActive ? 4 : 2}
+                        filter="url(#glowSubtle)"
+                        strokeDasharray="20 1200"
+                        initial={{ strokeDashoffset: node.side === 'left' ? 1200 : -1200, opacity: 0 }}
+                        animate={{
+                          strokeDashoffset: isActiveState 
+                            ? (node.side === 'left' ? [1200, 0] : [-1200, 0])
+                            : (node.side === 'left' ? 1200 : -1200),
+                          opacity: isActiveState ? [0, 1, 0] : 0
+                        }}
+                        transition={{
+                          strokeDashoffset: {
+                            duration: isNodeActive ? 0.8 : 1.5,
+                            repeat: Infinity,
+                            ease: "linear"
+                          },
+                          opacity: {
+                            duration: isNodeActive ? 0.8 : 1.5,
+                            repeat: Infinity,
+                            ease: "linear"
+                          }
+                        }}
+                      />
+                    </g>
                   );
                 })}
               </g>
-            </svg>
+            </motion.svg>
 
             {/* 3D Platform Base */}
-            <div className="absolute top-[75%] left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 flex flex-col items-center">
+            <motion.div style={{ x: networkX, y: networkY }} className="absolute top-[75%] left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 flex flex-col items-center">
               {/* Top Tier */}
               <div className="relative z-30 flex items-center justify-center">
-                {/* Cylinder Top Surface */}
                 <div className="w-[200px] h-[60px] bg-gradient-to-b from-[#f0f8ff] to-[#e6f2ff] rounded-[50%] border border-[#ffffff] shadow-[inset_0_2px_5px_rgba(255,255,255,1)] z-20 relative"></div>
-                {/* Cylinder Body (Thickness) */}
                 <div className="absolute top-[30px] w-[200px] h-[40px] bg-gradient-to-r from-[#d0e5ff] via-[#e6f2ff] to-[#d0e5ff] rounded-b-[50%] z-10 border-b border-[#aaccff]"></div>
               </div>
-
               {/* Middle Tier */}
               <div className="relative z-20 -mt-[45px] flex items-center justify-center">
                 <div className="w-[280px] h-[80px] bg-gradient-to-b from-[#eaf4ff] to-[#dcebfc] rounded-[50%] border border-[#ffffff] shadow-[inset_0_2px_5px_rgba(255,255,255,1)] z-20 relative"></div>
                 <div className="absolute top-[40px] w-[280px] h-[50px] bg-gradient-to-r from-[#c0dbff] via-[#dcebfc] to-[#c0dbff] rounded-b-[50%] z-10 border-b border-[#aaccff]"></div>
               </div>
-
               {/* Bottom Tier */}
               <div className="relative z-10 -mt-[55px] flex items-center justify-center">
                 <div className="w-[380px] h-[100px] bg-gradient-to-b from-[#e3f0ff] to-[#d1e6fa] rounded-[50%] border border-[#ffffff] shadow-[inset_0_2px_5px_rgba(255,255,255,1)] z-20 relative"></div>
                 <div className="absolute top-[50px] w-[380px] h-[60px] bg-gradient-to-r from-[#aed1ff] via-[#d1e6fa] to-[#aed1ff] rounded-b-[50%] z-10 border-b border-[#88bbff] shadow-[0_15px_30px_rgba(0,50,100,0.1)]"></div>
               </div>
-            </div>
-
-            {/* Central Circular iQuadra Node */}
-            <motion.div
-              animate={{ y: [0, -3, 0] }}
-              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute top-[50%] left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 w-[200px] h-[200px] rounded-full p-[2px] bg-gradient-to-br from-[#4A8CFF] to-[#16C784] shadow-[0_10px_40px_rgba(22,199,132,0.15)] flex items-center justify-center"
-            >
-              <div className="w-full h-full bg-white rounded-full flex flex-col items-center justify-center relative overflow-hidden shadow-[inset_0_0_20px_rgba(0,0,0,0.02)]">
-                <span className="relative text-[36px] font-[800] text-[#0A1B3F] tracking-tight z-30 leading-none">iQuadra</span>
-                <span className="relative text-[12px] text-gray-500 font-[600] mt-2 z-30 leading-tight">AI. Anywhere.<br />Everywhere.</span>
-              </div>
             </motion.div>
 
-            {/* Left Service Cards (Positioned exactly at stream termination levels Y=100, 300, 500 in 600px viewBox = 16.6%, 50%, 83.3%) */}
+            {/* Central Circular iQuadra Node */}
+            <motion.div 
+              style={{ x: coreX, y: coreY }}
+              className="absolute top-[50%] left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 w-[200px] h-[200px]"
+            >
+              <motion.div
+                animate={{ 
+                  y: [0, -3, 0],
+                  scale: activeNode ? [1, 1.05, 1] : 1,
+                  boxShadow: activeNode 
+                    ? ['0 10px 40px rgba(22,199,132,0.15)', '0 10px 60px rgba(22,199,132,0.4)', '0 10px 40px rgba(22,199,132,0.15)'] 
+                    : '0 10px 40px rgba(22,199,132,0.15)'
+                }}
+                transition={{ 
+                  y: { duration: 6, repeat: Infinity, ease: "easeInOut" },
+                  scale: { duration: 0.6, ease: "easeOut" },
+                  boxShadow: { duration: 0.6, ease: "easeOut" }
+                }}
+                className="w-full h-full rounded-full p-[2px] bg-gradient-to-br from-[#4A8CFF] to-[#16C784] flex items-center justify-center"
+              >
+                <div className="w-full h-full bg-white rounded-full flex flex-col items-center justify-center relative overflow-hidden shadow-[inset_0_0_20px_rgba(0,0,0,0.02)]">
+                  <img src="/nav-logo.png" alt="iQuadra" className="relative z-30 h-14 w-auto object-contain" />
+                </div>
+              </motion.div>
+            </motion.div>
+
+            {/* Left Service Cards */}
             <FloatingCard
+              id="ai-platforms"
+              isHovered={hoveredNode === 'ai-platforms'}
+              isActive={activeNode === 'ai-platforms'}
+              onHover={setHoveredNode}
+              onLeave={() => setHoveredNode(null)}
+              onClick={handleNodeClick}
               position="top-[16.6%] -translate-y-1/2 left-[2%]" delay={0.5}
               text={"AI Platforms &\nAgentic Workflows"}
               icon={
@@ -307,6 +481,12 @@ const Hero = () => {
               }
             />
             <FloatingCard
+              id="oracle-erp"
+              isHovered={hoveredNode === 'oracle-erp'}
+              isActive={activeNode === 'oracle-erp'}
+              onHover={setHoveredNode}
+              onLeave={() => setHoveredNode(null)}
+              onClick={handleNodeClick}
               position="top-[50%] -translate-y-1/2 -left-[5%]" delay={1.5}
               text={"Oracle Cloud\nERP"}
               icon={
@@ -317,6 +497,12 @@ const Hero = () => {
               }
             />
             <FloatingCard
+              id="data-sciences"
+              isHovered={hoveredNode === 'data-sciences'}
+              isActive={activeNode === 'data-sciences'}
+              onHover={setHoveredNode}
+              onLeave={() => setHoveredNode(null)}
+              onClick={handleNodeClick}
               position="top-[83.3%] -translate-y-1/2 left-[2%]" delay={2.5}
               text={"Data Sciences &\nAI Engineering"}
               icon={
@@ -327,8 +513,14 @@ const Hero = () => {
               }
             />
 
-            {/* Right Service Cards (Positioned exactly at stream termination levels Y=100, 300, 500 in 600px viewBox = 16.6%, 50%, 83.3%) */}
+            {/* Right Service Cards */}
             <FloatingCard
+              id="full-stack"
+              isHovered={hoveredNode === 'full-stack'}
+              isActive={activeNode === 'full-stack'}
+              onHover={setHoveredNode}
+              onLeave={() => setHoveredNode(null)}
+              onClick={handleNodeClick}
               position="top-[16.6%] -translate-y-1/2 right-[2%]" delay={1.0}
               text={"Full Stack Java &\nModern Apps"}
               icon={
@@ -339,6 +531,12 @@ const Hero = () => {
               }
             />
             <FloatingCard
+              id="devops"
+              isHovered={hoveredNode === 'devops'}
+              isActive={activeNode === 'devops'}
+              onHover={setHoveredNode}
+              onLeave={() => setHoveredNode(null)}
+              onClick={handleNodeClick}
               position="top-[50%] -translate-y-1/2 -right-[5%]" delay={2.0}
               text={"DevOps &\nCloud Engineering"}
               icon={
@@ -349,6 +547,12 @@ const Hero = () => {
               }
             />
             <FloatingCard
+              id="safe-agile"
+              isHovered={hoveredNode === 'safe-agile'}
+              isActive={activeNode === 'safe-agile'}
+              onHover={setHoveredNode}
+              onLeave={() => setHoveredNode(null)}
+              onClick={handleNodeClick}
               position="top-[83.3%] -translate-y-1/2 right-[2%]" delay={3.0}
               text={"SAFe Agile &\nQuality Engineering"}
               icon={

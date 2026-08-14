@@ -43,14 +43,8 @@ const Navbar = () => {
         <div className="w-full px-4 lg:px-8 xl:px-12 h-full flex items-center justify-between mx-auto">
           {/* Logo */}
           <div className="flex items-center h-full flex-shrink-0">
-            <a href="#" className="flex flex-col">
-              <span className="text-[24px] font-[900] text-primary-navy tracking-tight leading-none relative">
-                iQuadra
-                <svg className="absolute -top-1 -right-2.5 w-3 h-3 text-primary-green fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M2.5,21.5 L21.5,2.5 L14.5,21.5 L10.5,13.5 Z" />
-                </svg>
-              </span>
-              <span className="text-[7px] text-gray-500 font-[600] tracking-wide mt-0.5">AI. Anywhere. Everywhere.</span>
+            <a href="#" className="flex items-center">
+              <img src="/nav-logo.png" alt="iQuadra" className="h-[66px] w-auto object-contain" />
             </a>
           </div>
 
