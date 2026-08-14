@@ -81,23 +81,28 @@ const Hero = () => {
   const networkX = useTransform(smoothMouseX, [-1, 1], [-5, 5]);
   const networkY = useTransform(smoothMouseY, [-1, 1], [-5, 5]);
 
-  const handleMouseMove = (e) => {
-    if (isTouchDevice || !containerRef.current) return;
+  const updateCursorPosition = (clientX, clientY) => {
+    if (!containerRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
-    
-    // Normalize -1 to 1
-    const px = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-    const py = ((e.clientY - rect.top) / rect.height) * 2 - 1;
+    const px = ((clientX - rect.left) / rect.width) * 2 - 1;
+    const py = ((clientY - rect.top) / rect.height) * 2 - 1;
     mouseX.set(px);
     mouseY.set(py);
+    cursorX.set(clientX - rect.left);
+    cursorY.set(clientY - rect.top);
+  };
 
-    // Absolute cursor within container
-    cursorX.set(e.clientX - rect.left);
-    cursorY.set(e.clientY - rect.top);
+  const handleMouseMove = (e) => {
+    updateCursorPosition(e.clientX, e.clientY);
+  };
+
+  const handleTouchMove = (e) => {
+    if (e.touches.length > 0) {
+      updateCursorPosition(e.touches[0].clientX, e.touches[0].clientY);
+    }
   };
 
   const handleMouseLeave = () => {
-    if (isTouchDevice) return;
     mouseX.set(0);
     mouseY.set(0);
     cursorX.set(-100);
@@ -120,11 +125,12 @@ const Hero = () => {
     <section 
       ref={containerRef}
       onMouseMove={handleMouseMove}
+      onTouchMove={handleTouchMove}
       onMouseLeave={handleMouseLeave}
-      className={`relative pt-[30px] pb-[0px] overflow-hidden bg-white ${!isTouchDevice ? '[&_svg]:cursor-none' : ''}`}
+      className={`relative pt-[30px] pb-[0px] overflow-hidden bg-white [&_svg]:cursor-none`}
     >
       {/* Custom Cursor */}
-      {!isTouchDevice && (
+      {(
         <motion.div
           style={{
             x: cursorSmoothX,
@@ -155,7 +161,7 @@ const Hero = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <h1 className="text-[48px] lg:text-[60px] font-[800] text-primary-navy leading-[1.05] tracking-tight mb-6">
+            <h1 className="text-[38px] sm:text-[48px] lg:text-[60px] font-[800] text-primary-navy leading-[1.05] tracking-tight mb-4 sm:mb-6">
               AI-First <br />
               Enterprise <br />
               <span className="green-gradient-text">Transformation</span>
@@ -167,10 +173,10 @@ const Hero = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <h2 className="text-[18px] font-[700] text-primary-navy mb-4 leading-[1.6]">
+            <h2 className="text-[16px] sm:text-[18px] font-[700] text-primary-navy mb-3 sm:mb-4 leading-[1.6]">
               AI systems that transform enterprises end to end.
             </h2>
-            <p className="text-[16px] font-[500] text-text-secondary mb-8 max-w-[480px] leading-[1.6]">
+            <p className="text-[14px] sm:text-[16px] font-[500] text-text-secondary mb-6 sm:mb-8 max-w-[480px] leading-[1.6]">
               From strategy to deployment, iQuadra delivers AI platforms, agentic workflows, Oracle Cloud ERP, Full Stack Java, Data Sciences, DevOps, and SAFe Agile services for enterprises ready to scale.
             </p>
           </motion.div>
@@ -191,8 +197,8 @@ const Hero = () => {
         </div>
 
         {/* Right Content - Complex SVG Graphic */}
-        <div className="relative h-[480px] lg:h-[625px] w-full max-w-[900px] mx-auto flex items-center justify-center overflow-visible">
-          <div className="relative w-full aspect-square md:aspect-auto md:h-full flex items-center justify-center pointer-events-none [&_>_div]:pointer-events-auto">
+        <div className="relative h-[380px] sm:h-[480px] lg:h-[625px] w-full max-w-[900px] mx-auto flex items-center justify-center">
+          <div className="absolute lg:relative w-[800px] h-[600px] lg:w-full lg:h-full flex items-center justify-center pointer-events-none [&_>_div]:pointer-events-auto scale-[0.45] sm:scale-[0.65] md:scale-[0.8] lg:scale-100 origin-center">
 
             {/* SVG Network Cloud */}
             <motion.svg style={{ x: networkX, y: networkY }} viewBox="0 0 800 600" className="absolute inset-0 w-full h-full object-visible overflow-visible z-0 pointer-events-auto" xmlns="http://www.w3.org/2000/svg">
