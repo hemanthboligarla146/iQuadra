@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Send, User, Briefcase } from 'lucide-react';
 import Container from '../Common/Container';
 import SectionWrapper from '../Common/SectionWrapper';
@@ -6,6 +7,7 @@ import Card from '../Common/Card';
 import Button from '../Common/Button';
 
 const CTA = () => {
+  const navigate = useNavigate();
   return (
     <SectionWrapper bg="bg-secondary-bg">
       <Container>
@@ -28,7 +30,7 @@ const CTA = () => {
               <Button variant="solid" className="py-2.5 px-6 text-[15px]">
                 Talk to Our AI Team &rarr;
               </Button>
-              <Button variant="outline" className="py-2.5 px-6 text-[15px]">
+              <Button onClick={() => navigate('/it-services')} variant="outline" className="py-2.5 px-6 text-[15px]">
                 Explore IT Services &rarr;
               </Button>
             </div>

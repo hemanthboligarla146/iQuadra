@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Bot, Server } from 'lucide-react';
 import Card from '../Common/Card';
 
@@ -20,9 +21,9 @@ const WhatWeDo = () => {
           <p className="text-[15px] font-[400] text-text-secondary leading-[1.6] mb-8 flex-grow">
             We design and deliver AI platforms, agentic workflows, Retail AI, and our proprietary products — iQua.ai and Helix AI — for enterprise organizations ready to operationalize AI at scale.
           </p>
-          <a href="#" className="text-primary-green font-[600] text-[15px] flex items-center hover:underline mt-auto">
+          <Link to="/ai-products" className="text-primary-green font-[600] text-[15px] flex items-center hover:underline mt-auto">
             Explore AI Products &rarr;
-          </a>
+          </Link>
         </Card>
 
         {/* Card 2 */}
@@ -34,9 +35,9 @@ const WhatWeDo = () => {
           <p className="text-[15px] font-[400] text-text-secondary leading-[1.6] mb-8 flex-grow">
             From Full Stack Java and Python to Oracle Cloud ERP, DevOps, Data Engineering, Quality Engineering, and SAFe Agile — iQuadra's IT services keep your enterprise moving.
           </p>
-          <a href="#" className="text-secondary-blue font-[600] text-[15px] flex items-center hover:underline mt-auto">
+          <Link to="/it-services" className="text-secondary-blue font-[600] text-[15px] flex items-center hover:underline mt-auto">
             Explore IT Services &rarr;
-          </a>
+          </Link>
         </Card>
       </div>
     </div>

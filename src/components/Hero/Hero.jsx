@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import Button from '../Common/Button';
 
@@ -48,6 +49,7 @@ const NODES = [
 ];
 
 const Hero = () => {
+  const navigate = useNavigate();
   const containerRef = useRef(null);
   const [isTouchDevice, setIsTouchDevice] = useState(false);
   const [hoveredNode, setHoveredNode] = useState(null);
@@ -190,7 +192,7 @@ const Hero = () => {
             <Button variant="solid" className="w-full sm:w-auto h-[48px] text-[15px] font-[600] px-6">
               Talk to Our AI Team &rarr;
             </Button>
-            <Button variant="outline" className="w-full sm:w-auto h-[48px] text-[15px] font-[600] px-6">
+            <Button onClick={() => navigate('/it-services')} variant="outline" className="w-full sm:w-auto h-[48px] text-[15px] font-[600] px-6">
               Explore IT Services &rarr;
             </Button>
           </motion.div>
