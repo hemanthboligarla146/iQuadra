@@ -7,20 +7,20 @@ import Button from '../Common/Button';
 // Exact SVGs to match the image
 
 
-const TechNode = ({ icon: Icon, iconSrc, label, style }) => (
-  <div className="absolute z-10" style={style}>
+const TechNode = ({ icon: Icon, iconSrc, label, className }) => (
+  <div className={`absolute z-10 ${className}`}>
     <motion.div
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.5, delay: 0.3 }}
-      className="flex items-center gap-2.5 bg-white px-4 py-2.5 rounded-full shadow-[0_8px_30px_rgba(0,0,0,0.06)] border border-gray-100 shrink-0"
+      className="flex items-center gap-1.5 md:gap-2.5 bg-white px-2.5 py-1.5 md:px-4 md:py-2.5 rounded-full shadow-[0_8px_30px_rgba(0,0,0,0.08)] border border-gray-100 shrink-0 -translate-x-1/2 -translate-y-1/2"
     >
       {iconSrc ? (
-        <img src={iconSrc} alt={label} className="w-5 h-5 object-contain shrink-0" />
+        <img src={iconSrc} alt={label} className="w-4 h-4 md:w-5 md:h-5 object-contain shrink-0" />
       ) : (
-        <Icon className="shrink-0" />
+        <Icon className="shrink-0 w-4 h-4 md:w-5 md:h-5" />
       )}
-      <span className="text-[14px] font-bold text-primary-navy whitespace-nowrap">{label}</span>
+      <span className="text-[11px] md:text-[14px] font-bold text-primary-navy whitespace-nowrap">{label}</span>
     </motion.div>
   </div>
 );
@@ -46,7 +46,7 @@ const ITServicesHero = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.1 }}
-              className="text-[44px] lg:text-[56px] font-[800] text-primary-navy leading-[1.05] tracking-tight mb-8 max-w-[700px]"
+              className="text-[36px] sm:text-[44px] lg:text-[56px] font-[800] text-primary-navy leading-[1.1] tracking-tight mb-8 max-w-[700px]"
             >
               Enterprise technology, engineered to move <span className="green-gradient-text">business forward.</span>
             </motion.h1>
@@ -55,7 +55,7 @@ const ITServicesHero = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="text-[16px] font-[500] text-text-secondary leading-[1.6] mb-12 max-w-[550px]"
+              className="text-[15px] sm:text-[16px] font-[500] text-text-secondary leading-[1.6] mb-12 max-w-[550px]"
             >
               From application engineering and data platforms to Oracle Cloud ERP, DevOps, quality engineering and agile delivery, iQuadra helps enterprises modernize, scale and operate with confidence.
             </motion.p>
@@ -76,7 +76,7 @@ const ITServicesHero = () => {
           </div>
 
           {/* Right: Architecture Visual */}
-          <div className="w-full lg:w-[50%] flex items-center justify-center p-4">
+          <div className="w-full lg:w-[50%] flex items-center justify-center p-2 sm:p-4">
             
             {/* Bulletproof Aspect Ratio Container (800x650) -> paddingBottom: 650/800 = 81.25% */}
             <div className="relative w-full max-w-[800px]" style={{ paddingBottom: '81.25%' }}>
@@ -86,8 +86,8 @@ const ITServicesHero = () => {
                 <svg className="absolute inset-0 w-full h-full pointer-events-none z-0" viewBox="0 0 800 650" preserveAspectRatio="none" style={{ overflow: 'visible' }}>
                   
                   {/* Connecting Lines mapped perfectly to the fixed 800x650 coordinates */}
-                  <motion.path initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1.2, ease: "easeOut", delay: 0.2 }} d="M 64 325 L 400 325" stroke="#bfdbfe" strokeWidth="1.5" fill="none" />
-                  <motion.path initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1.2, ease: "easeOut", delay: 0.2 }} d="M 736 325 L 400 325" stroke="#bfdbfe" strokeWidth="1.5" fill="none" />
+                  <motion.path initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1.2, ease: "easeOut", delay: 0.2 }} d="M 120 325 L 400 325" stroke="#bfdbfe" strokeWidth="1.5" fill="none" />
+                  <motion.path initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1.2, ease: "easeOut", delay: 0.2 }} d="M 680 325 L 400 325" stroke="#bfdbfe" strokeWidth="1.5" fill="none" />
                   
                   {/* Smooth Bezier curves for the corner nodes */}
                   <motion.path initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1.2, ease: "easeOut", delay: 0.2 }} d="M 160 97.5 C 280 97.5, 320 325, 400 325" stroke="#bfdbfe" strokeWidth="1.5" fill="none" />
@@ -112,24 +112,24 @@ const ITServicesHero = () => {
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.7, delay: 0.1 }}
-                    className="w-[200px] h-[200px] shrink-0 bg-primary-navy rounded-full shadow-[0_0_50px_rgba(27,43,74,0.3)] flex flex-col items-center justify-center p-4 border-[6px] border-white"
+                    className="w-[150px] h-[150px] md:w-[200px] md:h-[200px] shrink-0 bg-primary-navy rounded-full shadow-[0_0_50px_rgba(27,43,74,0.3)] flex flex-col items-center justify-center p-4 border-[6px] border-white"
                   >
                     <div className="flex items-center gap-0.5 mb-1 relative w-full justify-center">
-                      <span className="text-white font-extrabold text-[18px] tracking-wide shrink-0">iQuadra</span>
-                      <div className="w-[5px] h-[5px] rounded-full bg-primary-green absolute -right-3 top-1.5" />
+                      <span className="text-white font-extrabold text-[15px] md:text-[18px] tracking-wide shrink-0">iQuadra</span>
+                      <div className="w-[4px] h-[4px] md:w-[5px] md:h-[5px] rounded-full bg-primary-green absolute -right-2 md:-right-3 top-1 md:top-1.5" />
                     </div>
-                    <span className="text-[12px] font-medium text-gray-300 text-center leading-[1.3] shrink-0">Technology<br/>Engine</span>
+                    <span className="text-[10px] md:text-[12px] font-medium text-gray-300 text-center leading-[1.3] shrink-0">Technology<br/>Engine</span>
                   </motion.div>
                 </div>
 
                 {/* Surrounding Nodes using exact percentage styles matching the 800x650 grid */}
-                <TechNode iconSrc="/tech-icons/icon2.png" label="Java" style={{ top: '15%', left: '20%', transform: 'translate(-100%, -50%)' }} />
-                <TechNode iconSrc="/tech-icons/icon1.png" label="Python" style={{ top: '50%', left: '8%', transform: 'translate(-100%, -50%)' }} />
-                <TechNode iconSrc="/tech-icons/icon3.png" label="Data" style={{ top: '85%', left: '20%', transform: 'translate(-100%, -50%)' }} />
+                <TechNode iconSrc="/tech-icons/icon2.png" label="Java" className="top-[15%] left-[20%]" />
+                <TechNode iconSrc="/tech-icons/icon1.png" label="Python" className="top-[50%] left-[15%]" />
+                <TechNode iconSrc="/tech-icons/icon3.png" label="Data" className="top-[85%] left-[20%]" />
                 
-                <TechNode iconSrc="/tech-icons/icon4.png" label="Cloud" style={{ top: '15%', left: '80%', transform: 'translate(0, -50%)' }} />
-                <TechNode iconSrc="/tech-icons/icon5.png" label="Oracle" style={{ top: '50%', left: '92%', transform: 'translate(0, -50%)' }} />
-                <TechNode iconSrc="/tech-icons/icon6.png" label="DevOps" style={{ top: '85%', left: '80%', transform: 'translate(0, -50%)' }} />
+                <TechNode iconSrc="/tech-icons/icon4.png" label="Cloud" className="top-[15%] left-[80%]" />
+                <TechNode iconSrc="/tech-icons/icon5.png" label="Oracle" className="top-[50%] left-[85%]" />
+                <TechNode iconSrc="/tech-icons/icon6.png" label="DevOps" className="top-[85%] left-[80%]" />
                 
               </div>
             </div>

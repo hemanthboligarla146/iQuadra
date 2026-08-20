@@ -27,43 +27,44 @@ const IndustryArchitecture = () => {
         </div>
 
         {/* Central Architecture Visual */}
-        <div className="relative w-full max-w-5xl mx-auto h-[450px] md:h-[400px] flex items-center justify-center">
+        <div className="relative w-full max-w-5xl mx-auto h-auto md:h-[400px] py-12 md:py-0 flex items-center justify-center">
           
-          {/* Background Connecting Line */}
+          {/* Background Connecting Line (Horizontal for Desktop, Vertical for Mobile) */}
           <div className="absolute top-1/2 left-4 right-4 h-[2px] bg-gray-200 -translate-y-1/2 hidden md:block z-0"></div>
+          <div className="absolute top-16 bottom-16 left-1/2 w-[2px] bg-gray-200 -translate-x-1/2 md:hidden z-0"></div>
           
           {/* Floating Labels (Decorative) */}
           <motion.div 
             animate={{ y: [0, -10, 0] }} 
             transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
-            className="absolute top-[15%] md:top-[12%] left-[15%] md:left-[22%] px-3 py-1 bg-white border border-gray-100 rounded-md text-[12px] font-bold text-gray-500 shadow-sm z-30"
+            className="absolute top-[31%] md:top-[12%] left-2 md:left-[22%] px-2 py-1 md:px-3 md:py-1 bg-white border border-gray-100 rounded-md text-[10px] md:text-[12px] font-bold text-gray-500 shadow-sm z-30"
           >
             AI Models
           </motion.div>
           <motion.div 
             animate={{ y: [0, 10, 0] }} 
             transition={{ repeat: Infinity, duration: 5, ease: "easeInOut", delay: 1 }}
-            className="absolute bottom-[15%] md:bottom-[12%] left-[20%] md:left-[30%] px-3 py-1 bg-white border border-gray-100 rounded-md text-[12px] font-bold text-gray-500 shadow-sm z-30"
+            className="absolute top-[67%] md:top-auto md:bottom-[12%] left-2 md:left-[30%] px-2 py-1 md:px-3 md:py-1 bg-white border border-gray-100 rounded-md text-[10px] md:text-[12px] font-bold text-gray-500 shadow-sm z-30"
           >
             Cloud Infrastructure
           </motion.div>
           <motion.div 
             animate={{ y: [0, -8, 0] }} 
             transition={{ repeat: Infinity, duration: 3.5, ease: "easeInOut", delay: 0.5 }}
-            className="absolute top-[20%] md:top-[15%] right-[20%] md:right-[28%] px-3 py-1 bg-white border border-gray-100 rounded-md text-[12px] font-bold text-gray-500 shadow-sm z-30"
+            className="absolute top-[33%] md:top-[15%] right-2 md:right-[28%] px-2 py-1 md:px-3 md:py-1 bg-white border border-gray-100 rounded-md text-[10px] md:text-[12px] font-bold text-gray-500 shadow-sm z-30"
           >
             Data Engineering
           </motion.div>
           <motion.div 
             animate={{ y: [0, 12, 0] }} 
             transition={{ repeat: Infinity, duration: 4.5, ease: "easeInOut", delay: 1.5 }}
-            className="absolute bottom-[10%] md:bottom-[15%] right-[15%] md:right-[22%] px-3 py-1 bg-white border border-gray-100 rounded-md text-[12px] font-bold text-gray-500 shadow-sm z-30"
+            className="absolute top-[69%] md:top-auto md:bottom-[15%] right-2 md:right-[22%] px-2 py-1 md:px-3 md:py-1 bg-white border border-gray-100 rounded-md text-[10px] md:text-[12px] font-bold text-gray-500 shadow-sm z-30"
           >
             Enterprise ERP
           </motion.div>
 
           {/* Core Flow */}
-          <div className="flex flex-col md:flex-row items-center justify-between w-full relative z-20 gap-8 md:gap-0">
+          <div className="flex flex-col md:flex-row items-center justify-between w-full relative z-20 gap-16 md:gap-0">
             
             {/* Step 1 */}
             <motion.div 
