@@ -5,7 +5,7 @@ import Container from '../Common/Container';
 
 const Footer = () => {
   return (
-    <footer className="bg-white pt-[40px] lg:pt-[50px] pb-6 border-t border-gray-100">
+    <footer className="bg-white pt-[24px] lg:pt-[32px] pb-6 border-t border-gray-100">
       <Container>
         {/* 6 Column Desktop Layout */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1fr_1fr_1.5fr] gap-8 lg:gap-4 mb-[40px]">
