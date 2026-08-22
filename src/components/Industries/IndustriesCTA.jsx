@@ -1,10 +1,13 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import Container from '../Common/Container';
 import Button from '../Common/Button';
 import { ArrowRight, HelpCircle } from 'lucide-react';
 
 const IndustriesCTA = () => {
+  const navigate = useNavigate();
+
   return (
     <>
       {/* Don't See Your Industry */}
@@ -23,7 +26,7 @@ const IndustriesCTA = () => {
               </p>
             </div>
             <div className="w-full md:w-auto flex justify-center shrink-0 mt-4 md:mt-0">
-              <Button variant="solid" className="w-full md:w-auto justify-center !py-3.5 !px-8 text-[15px] font-semibold !bg-primary-green hover:!bg-green-600 !text-white border-none shadow-[0_4px_14px_0_rgba(22,199,132,0.39)] !rounded-lg whitespace-nowrap">
+              <Button onClick={() => navigate('/contact-ai')} variant="solid" className="w-full md:w-auto justify-center !py-3.5 !px-8 text-[15px] font-semibold !bg-primary-green hover:!bg-green-600 !text-white border-none shadow-[0_4px_14px_0_rgba(22,199,132,0.39)] !rounded-lg whitespace-nowrap">
                 Start a Conversation <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
             </div>
@@ -64,10 +67,10 @@ const IndustriesCTA = () => {
                 transition={{ delay: 0.2 }}
                 className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full"
               >
-                <Button variant="solid" className="w-full sm:w-auto justify-center !py-3.5 !px-8 text-[15px] font-semibold !bg-primary-green hover:!bg-green-600 !text-white border-none shadow-[0_4px_14px_0_rgba(22,199,132,0.39)] !rounded-lg whitespace-nowrap">
+                <Button onClick={() => navigate('/contact-ai')} variant="solid" className="w-full sm:w-auto justify-center !py-3.5 !px-8 text-[15px] font-semibold !bg-primary-green hover:!bg-green-600 !text-white border-none shadow-[0_4px_14px_0_rgba(22,199,132,0.39)] !rounded-lg whitespace-nowrap">
                   Talk to Our AI Team
                 </Button>
-                <Button variant="solid" className="w-full sm:w-auto justify-center !py-3.5 !px-8 text-[15px] font-semibold !bg-transparent !text-white !border !border-gray-500 hover:!bg-white/10 hover:!border-gray-300 transition-all duration-300 !rounded-lg !shadow-none whitespace-nowrap">
+                <Button onClick={() => navigate('/it-services')} variant="solid" className="w-full sm:w-auto justify-center !py-3.5 !px-8 text-[15px] font-semibold !bg-transparent !text-white !border !border-gray-500 hover:!bg-white/10 hover:!border-gray-300 transition-all duration-300 !rounded-lg !shadow-none whitespace-nowrap">
                   Explore Our Services
                 </Button>
               </motion.div>

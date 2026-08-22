@@ -15,7 +15,7 @@ const AIProducts = () => {
       
       <main className="pt-[72px]">
         <AIProductsHero />
-        <ProductSuite />
+        <div id="product-suite"><ProductSuite /></div>
         <ProductValueStrip />
         <BusinessImpact />
         <AIFoundation />

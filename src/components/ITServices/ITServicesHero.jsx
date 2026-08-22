@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Database, Cloud } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import Container from '../Common/Container';
 import Button from '../Common/Button';
 
@@ -26,6 +27,8 @@ const TechNode = ({ icon: Icon, iconSrc, label, className }) => (
 );
 
 const ITServicesHero = () => {
+  const navigate = useNavigate();
+
   return (
     <section className="pt-12 pb-8 lg:pt-16 lg:pb-10 bg-[#fafafa] relative overflow-hidden border-b border-gray-100">
       <Container>
@@ -66,10 +69,10 @@ const ITServicesHero = () => {
               transition={{ duration: 0.5, delay: 0.3 }}
               className="flex flex-col sm:flex-row gap-4"
             >
-              <Button variant="solid" className="!py-3.5 !px-8 text-[14px] font-semibold !bg-primary-green hover:!bg-green-600 !text-white border-none shadow-[0_4px_14px_0_rgba(22,199,132,0.39)] !rounded-md">
+              <Button onClick={() => navigate('/contact-ai')} variant="solid" className="!py-3.5 !px-8 text-[14px] font-semibold !bg-primary-green hover:!bg-green-600 !text-white border-none shadow-[0_4px_14px_0_rgba(22,199,132,0.39)] !rounded-md">
                 Talk to Our IT Team &rarr;
               </Button>
-              <Button variant="outline" className="!py-3.5 !px-8 text-[14px] font-semibold !border-primary-green/40 !text-primary-green hover:!bg-primary-green/5 transition-all duration-300 !rounded-md bg-white">
+              <Button onClick={() => navigate('/capabilities')} variant="outline" className="!py-3.5 !px-8 text-[14px] font-semibold !border-primary-green/40 !text-primary-green hover:!bg-primary-green/5 transition-all duration-300 !rounded-md bg-white">
                 Explore Our Capabilities &rarr;
               </Button>
             </motion.div>

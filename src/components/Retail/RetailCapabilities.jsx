@@ -1,5 +1,5 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { LineChart, UserCheck, Box, Settings, MessageSquare, PieChart, ArrowRight } from 'lucide-react';
 import Container from '../Common/Container';
 
@@ -37,6 +37,8 @@ const capabilities = [
 ];
 
 const RetailCapabilities = () => {
+  const [expandedIndex, setExpandedIndex] = useState(null);
+
   return (
     <section className="pt-4 lg:pt-8 pb-4 lg:pb-8 bg-white border-t border-gray-100">
       <Container>
@@ -78,10 +80,32 @@ const RetailCapabilities = () => {
               </p>
               
               <div className="mt-auto flex justify-start">
-                <div className="inline-flex items-center text-[13px] font-bold text-primary-green group-hover:text-green-700 transition-colors cursor-pointer">
-                  Learn more <ArrowRight className="w-4 h-4 ml-1.5 transition-transform group-hover:translate-x-1" />
-                </div>
+                <button 
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setExpandedIndex(expandedIndex === idx ? null : idx);
+                  }}
+                  className="inline-flex items-center text-[13px] font-bold text-primary-green group-hover:text-green-700 transition-colors cursor-pointer"
+                >
+                  {expandedIndex === idx ? 'Show less' : 'Learn more'} 
+                  <ArrowRight className={`w-4 h-4 ml-1.5 transition-transform ${expandedIndex === idx ? '-rotate-90' : 'group-hover:translate-x-1'}`} />
+                </button>
               </div>
+
+              <AnimatePresence>
+                {expandedIndex === idx && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    className="overflow-hidden"
+                  >
+                    <div className="pt-4 mt-4 border-t border-gray-100 text-[13px] text-text-secondary leading-relaxed text-left">
+                      See how {cap.title} can be rapidly deployed in your existing retail infrastructure to drive immediate efficiency and revenue growth. <a href="/contact-ai" className="text-primary-green hover:underline">Speak with our retail experts</a>.
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </motion.div>
           ))}
         </div>

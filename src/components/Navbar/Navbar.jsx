@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation, Link } from 'react-router-dom';
+import { useLocation, Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, Menu, X, Lock } from 'lucide-react';
 import Button from '../Common/Button';
@@ -92,6 +92,7 @@ const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -131,11 +132,12 @@ const Navbar = () => {
 
           {/* Right Side Actions */}
           <div className="hidden lg:flex items-center gap-[16px] flex-shrink-0">
-            <a href="#" className="flex items-center text-[14px] font-[600] text-primary-navy bg-white border border-primary-green/30 rounded-lg px-4 py-2 hover:border-primary-green hover:bg-primary-green/5 transition-colors">
+            <Link to="/login" className="flex items-center text-[14px] font-[600] text-primary-navy bg-white border border-primary-green/30 rounded-lg px-4 py-2 hover:border-primary-green hover:bg-primary-green/5 transition-colors">
               <Lock className="w-[16px] h-[16px] mr-2 text-primary-navy" strokeWidth={2} />
               Employee Login
-            </a>
+            </Link>
             <Button
+              onClick={() => navigate('/contact-ai')}
               variant="solid"
               className="
                 !h-[40px]

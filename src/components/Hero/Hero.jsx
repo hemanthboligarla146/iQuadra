@@ -189,7 +189,7 @@ const Hero = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
           >
-            <Button variant="solid" className="w-full sm:w-auto h-[48px] text-[15px] font-[600] px-6">
+            <Button onClick={() => navigate('/contact-ai')} variant="solid" className="w-full sm:w-auto h-[48px] text-[15px] font-[600] px-6">
               Talk to Our AI Team &rarr;
             </Button>
             <Button onClick={() => navigate('/it-services')} variant="outline" className="w-full sm:w-auto h-[48px] text-[15px] font-[600] px-6">

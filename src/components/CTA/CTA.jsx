@@ -27,7 +27,7 @@ const CTA = () => {
               </div>
             </div>
             <div className="flex flex-wrap gap-4 mt-auto">
-              <Button variant="solid" className="py-2.5 px-6 text-[15px]">
+              <Button onClick={() => navigate('/contact-ai')} variant="solid" className="py-2.5 px-6 text-[15px]">
                 Talk to Our AI Team &rarr;
               </Button>
               <Button onClick={() => navigate('/it-services')} variant="outline" className="py-2.5 px-6 text-[15px]">
@@ -51,7 +51,7 @@ const CTA = () => {
               </div>
             </div>
             <div className="mt-auto">
-              <button className="flex items-center text-[15px] font-[600] text-secondary-blue border border-secondary-blue rounded-full px-6 py-2.5 hover:bg-secondary-blue hover:text-white transition-colors w-fit">
+              <button onClick={() => navigate('/login')} className="flex items-center text-[15px] font-[600] text-secondary-blue border border-secondary-blue rounded-full px-6 py-2.5 hover:bg-secondary-blue hover:text-white transition-colors w-fit">
                 Staff Login &rarr;
               </button>
             </div>
@@ -71,7 +71,7 @@ const CTA = () => {
               </div>
             </div>
             <div className="mt-auto">
-              <button className="flex items-center text-[15px] font-[600] text-accent-orange border border-accent-orange rounded-full px-6 py-2.5 hover:bg-accent-orange hover:text-white transition-colors w-fit">
+              <button onClick={() => alert('Careers page coming soon!')} className="flex items-center text-[15px] font-[600] text-accent-orange border border-accent-orange rounded-full px-6 py-2.5 hover:bg-accent-orange hover:text-white transition-colors w-fit">
                 View Careers &rarr;
               </button>
             </div>

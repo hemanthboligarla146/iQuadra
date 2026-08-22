@@ -1,5 +1,5 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { BarChart3, TrendingUp, MessageSquare, Box, ShieldCheck, ShoppingBag, ArrowRight } from 'lucide-react';
 import Container from '../Common/Container';
 
@@ -94,6 +94,8 @@ const colorClasses = {
 };
 
 const ProductSuite = () => {
+  const [expandedIndex, setExpandedIndex] = useState(null);
+
   return (
     <section className="pt-4 lg:pt-8 pb-16 lg:pb-20 bg-white border-t border-gray-100">
       <Container>
@@ -157,10 +159,32 @@ const ProductSuite = () => {
                 </p>
                 
                 <div className="mt-auto flex justify-start">
-                  <a href="#" className="inline-flex items-center text-[13px] font-bold text-primary-green hover:text-green-700 transition-colors">
-                    Learn more <ArrowRight className="w-[14px] h-[14px] ml-1.5 transition-transform group-hover:translate-x-1" />
-                  </a>
+                  <button 
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setExpandedIndex(expandedIndex === index ? null : index);
+                    }}
+                    className="inline-flex items-center text-[13px] font-bold text-primary-green hover:text-green-700 transition-colors"
+                  >
+                    {expandedIndex === index ? 'Show less' : 'Learn more'} 
+                    <ArrowRight className={`w-[14px] h-[14px] ml-1.5 transition-transform ${expandedIndex === index ? '-rotate-90' : 'group-hover:translate-x-1'}`} />
+                  </button>
                 </div>
+                
+                <AnimatePresence>
+                  {expandedIndex === index && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      className="overflow-hidden"
+                    >
+                      <div className="pt-4 mt-4 border-t border-gray-100 text-[13px] text-text-secondary leading-relaxed text-left">
+                        Discover how {product.name} integrates securely into your existing ecosystem to deliver measurable ROI. <a href="/contact-ai" className="text-primary-green hover:underline">Contact our AI team</a> for a technical deep dive.
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </motion.div>
             );
           })}

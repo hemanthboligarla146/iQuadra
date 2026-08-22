@@ -1,9 +1,12 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import { Users, Settings, ArrowRight } from 'lucide-react';
 import Container from '../Common/Container';
 
 const CompanyOverview = () => {
+  const navigate = useNavigate();
+
   return (
     <section className="py-8 lg:py-10 bg-white">
       <Container>
@@ -35,7 +38,7 @@ const CompanyOverview = () => {
                   Our teams combine deep domain knowledge with modern engineering practices to deliver secure, scalable and cost-effective outcomes across AI, ERP, Cloud, data and agile delivery.
                 </p>
               </div>
-              <button className="flex items-center text-primary-green font-semibold border border-primary-green rounded-full px-6 py-2.5 hover:bg-primary-green hover:text-white transition-colors duration-300">
+              <button onClick={() => navigate('/who-we-are')} className="flex items-center text-primary-green font-semibold border border-primary-green rounded-full px-6 py-2.5 hover:bg-primary-green hover:text-white transition-colors duration-300">
                 Learn more about us <ArrowRight className="w-4 h-4 ml-2" />
               </button>
             </div>
@@ -64,7 +67,7 @@ const CompanyOverview = () => {
                   With our proprietary AI products — iQua.ai and Helix AI — we help organizations automate, optimize and scale with confidence.
                 </p>
               </div>
-              <button className="flex items-center text-primary-green font-semibold border border-primary-green rounded-full px-6 py-2.5 hover:bg-primary-green hover:text-white transition-colors duration-300">
+              <button onClick={() => navigate('/what-we-do')} className="flex items-center text-primary-green font-semibold border border-primary-green rounded-full px-6 py-2.5 hover:bg-primary-green hover:text-white transition-colors duration-300">
                 Explore our capabilities <ArrowRight className="w-4 h-4 ml-2" />
               </button>
             </div>

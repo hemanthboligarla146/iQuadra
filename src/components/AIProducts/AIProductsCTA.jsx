@@ -1,9 +1,22 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import Container from '../Common/Container';
 import Button from '../Common/Button';
 
 const AIProductsCTA = () => {
+  const navigate = useNavigate();
+
+  const handleExploreClick = () => {
+    const element = document.getElementById('product-suite');
+    if (element) {
+      const y = element.getBoundingClientRect().top + window.scrollY - 72;
+      window.scrollTo({ top: y, behavior: 'smooth' });
+    } else {
+      navigate('/ai-products');
+    }
+  };
+
   return (
     <section className="py-16 lg:py-20 bg-white">
       <Container>
@@ -47,10 +60,10 @@ const AIProductsCTA = () => {
               transition={{ delay: 0.2 }}
               className="flex flex-col sm:flex-row gap-4 shrink-0"
             >
-              <Button variant="solid" className="!py-3.5 !px-8 text-[15px] font-semibold w-full sm:w-auto justify-center !bg-primary-green hover:!bg-green-600 !text-white border-none shadow-[0_4px_14px_0_rgba(22,199,132,0.39)] !rounded-lg">
+              <Button onClick={handleExploreClick} variant="solid" className="!py-3.5 !px-8 text-[15px] font-semibold w-full sm:w-auto justify-center !bg-primary-green hover:!bg-green-600 !text-white border-none shadow-[0_4px_14px_0_rgba(22,199,132,0.39)] !rounded-lg">
                 Explore Our Products &rarr;
               </Button>
-              <Button variant="outline" className="!py-3.5 !px-8 text-[15px] font-semibold w-full sm:w-auto justify-center !bg-transparent !border-white/30 !text-white hover:!bg-white/10 hover:!border-white transition-all duration-300 !rounded-lg">
+              <Button onClick={() => navigate('/contact-ai')} variant="outline" className="!py-3.5 !px-8 text-[15px] font-semibold w-full sm:w-auto justify-center !bg-transparent !border-white/30 !text-white hover:!bg-white/10 hover:!border-white transition-all duration-300 !rounded-lg">
                 Talk to Our AI Team &rarr;
               </Button>
             </motion.div>

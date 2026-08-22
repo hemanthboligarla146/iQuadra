@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import { UserCircle, Database, Brain, Workflow, Target, ArrowRight } from 'lucide-react';
 import Container from '../Common/Container';
 import Button from '../Common/Button';
@@ -30,6 +31,8 @@ const FlowArrow = ({ delay }) => (
 );
 
 const RetailHero = () => {
+  const navigate = useNavigate();
+
   return (
     <section className="pt-20 lg:pt-24 pb-6 lg:pb-8 bg-white relative overflow-hidden">
       <Container className="relative z-10 flex flex-col items-center text-center">
@@ -77,11 +80,11 @@ const RetailHero = () => {
           transition={{ delay: 0.3 }}
           className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto mb-8"
         >
-          <Button variant="solid" className="w-full sm:w-auto justify-center !py-3.5 !px-8 text-[15px] font-semibold !bg-primary-green hover:!bg-green-600 !text-white border-none shadow-[0_4px_14px_0_rgba(22,199,132,0.39)] !rounded-lg">
+          <Button onClick={() => navigate('/contact-ai')} variant="solid" className="w-full sm:w-auto justify-center !py-3.5 !px-8 text-[15px] font-semibold !bg-primary-green hover:!bg-green-600 !text-white border-none shadow-[0_4px_14px_0_rgba(22,199,132,0.39)] !rounded-lg">
             Talk to Our Retail AI Team &rarr;
           </Button>
-          <Button variant="outline" className="w-full sm:w-auto justify-center !py-3.5 !px-8 text-[15px] font-semibold !text-primary-navy !border-gray-200 hover:!bg-gray-50 transition-all duration-300 !rounded-lg bg-white">
-            Explore Retail Capabilities &rarr;
+          <Button onClick={() => navigate('/ai-products')} variant="outline" className="w-full sm:w-auto justify-center !py-3.5 !px-8 text-[15px] font-semibold !text-primary-navy !border-gray-200 hover:!bg-gray-50 transition-all duration-300 !rounded-lg bg-white">
+            Explore AI Products &rarr;
           </Button>
         </motion.div>
 

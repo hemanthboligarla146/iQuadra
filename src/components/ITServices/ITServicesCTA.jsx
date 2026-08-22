@@ -1,9 +1,12 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import Container from '../Common/Container';
 import Button from '../Common/Button';
 
 const ITServicesCTA = () => {
+  const navigate = useNavigate();
+
   return (
     <section className="py-8 lg:py-12 bg-transparent">
       <Container>
@@ -47,10 +50,10 @@ const ITServicesCTA = () => {
               transition={{ delay: 0.2 }}
               className="flex flex-col sm:flex-row gap-4 shrink-0"
             >
-              <Button variant="solid" className="!py-3.5 !px-8 text-[15px] font-semibold w-full sm:w-auto justify-center !bg-primary-green hover:!bg-green-600 !text-white border-none shadow-[0_4px_14px_0_rgba(22,199,132,0.39)] !rounded-lg">
+              <Button onClick={() => navigate('/contact-ai')} variant="solid" className="!py-3.5 !px-8 text-[15px] font-semibold w-full sm:w-auto justify-center !bg-primary-green hover:!bg-green-600 !text-white border-none shadow-[0_4px_14px_0_rgba(22,199,132,0.39)] !rounded-lg">
                 Talk to Our IT Team &rarr;
               </Button>
-              <Button variant="outline" className="!py-3.5 !px-8 text-[15px] font-semibold w-full sm:w-auto justify-center !bg-transparent !border-white/30 !text-white hover:!bg-white/10 hover:!border-white transition-all duration-300 !rounded-lg">
+              <Button onClick={() => navigate('/capabilities')} variant="outline" className="!py-3.5 !px-8 text-[15px] font-semibold w-full sm:w-auto justify-center !bg-transparent !border-white/30 !text-white hover:!bg-white/10 hover:!border-white transition-all duration-300 !rounded-lg">
                 Explore IT Services &rarr;
               </Button>
             </motion.div>

@@ -1,9 +1,12 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import Container from '../Common/Container';
 import Button from '../Common/Button';
 
 const AboutCTA = () => {
+  const navigate = useNavigate();
+
   return (
     <section className="pt-2 pb-0 lg:pt-4 lg:pb-2 bg-white">
       <Container>
@@ -47,10 +50,10 @@ const AboutCTA = () => {
               transition={{ delay: 0.2 }}
               className="flex flex-col sm:flex-row gap-4 shrink-0"
             >
-              <Button variant="solid" className="!py-3.5 !px-8 text-[15px] font-semibold w-full sm:w-auto justify-center !bg-primary-green hover:!bg-green-600 !text-white border-none shadow-[0_4px_14px_0_rgba(22,199,132,0.39)] !rounded-lg">
+              <Button onClick={() => navigate('/contact-ai')} variant="solid" className="!py-3.5 !px-8 text-[15px] font-semibold w-full sm:w-auto justify-center !bg-primary-green hover:!bg-green-600 !text-white border-none shadow-[0_4px_14px_0_rgba(22,199,132,0.39)] !rounded-lg">
                 Talk to Our AI Team &rarr;
               </Button>
-              <Button variant="outline" className="!py-3.5 !px-8 text-[15px] font-semibold w-full sm:w-auto justify-center !bg-transparent !border-white/30 !text-white hover:!bg-white/10 hover:!border-white transition-all duration-300 !rounded-lg">
+              <Button onClick={() => navigate('/ai-products')} variant="outline" className="!py-3.5 !px-8 text-[15px] font-semibold w-full sm:w-auto justify-center !bg-transparent !border-white/30 !text-white hover:!bg-white/10 hover:!border-white transition-all duration-300 !rounded-lg">
                 Explore AI Products &rarr;
               </Button>
             </motion.div>

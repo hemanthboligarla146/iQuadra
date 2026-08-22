@@ -1,10 +1,19 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import Container from '../Common/Container';
 import Button from '../Common/Button';
 import { ArrowRight, CheckCircle2 } from 'lucide-react';
 
 const FeaturedIndustry = ({ industry }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const navigate = useNavigate();
+
+  // Reset expansion state when industry changes
+  useEffect(() => {
+    setIsExpanded(false);
+  }, [industry]);
+
   if (!industry) return null;
 
   return (
@@ -53,10 +62,37 @@ const FeaturedIndustry = ({ industry }) => {
                 </ul>
               </div>
 
-              <Button variant="outline" className="group">
+              <Button 
+                onClick={() => setIsExpanded(!isExpanded)}
+                variant="outline" 
+                className="group"
+              >
                 Explore {industry.name} Solutions 
-                <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className={`w-4 h-4 ml-2 transition-transform ${isExpanded ? 'rotate-90' : 'group-hover:translate-x-1'}`} />
               </Button>
+
+              <AnimatePresence>
+                {isExpanded && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="overflow-hidden mt-6"
+                  >
+                    <div className="p-6 bg-gray-50 rounded-xl border border-gray-100">
+                      <p className="text-[15px] text-text-secondary leading-relaxed mb-4">
+                        {industry.extraContent}
+                      </p>
+                      <button 
+                        onClick={() => navigate(industry.link)}
+                        className={`inline-flex items-center font-bold ${industry.color} hover:underline`}
+                      >
+                        View Full Details <ArrowRight className="w-4 h-4 ml-1" />
+                      </button>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           </motion.div>
         </AnimatePresence>

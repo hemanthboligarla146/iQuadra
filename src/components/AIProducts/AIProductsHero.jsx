@@ -1,9 +1,20 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import Container from '../Common/Container';
 import Button from '../Common/Button';
 
 const AIProductsHero = () => {
+  const navigate = useNavigate();
+
+  const handleExploreClick = () => {
+    const element = document.getElementById('product-suite');
+    if (element) {
+      const y = element.getBoundingClientRect().top + window.scrollY - 72; // Account for fixed navbar
+      window.scrollTo({ top: y, behavior: 'smooth' });
+    }
+  };
+
   return (
     <section className="pt-6 lg:pt-8 pb-2 lg:pb-4 bg-white relative overflow-hidden">
       <Container className="relative z-10 flex flex-col items-center text-center">
@@ -45,10 +56,10 @@ const AIProductsHero = () => {
           transition={{ delay: 0.3 }}
           className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto"
         >
-          <Button variant="solid" className="w-full sm:w-auto justify-center !py-3.5 !px-8 text-[15px] font-semibold !bg-primary-green hover:!bg-green-600 !text-white border-none shadow-[0_4px_14px_0_rgba(22,199,132,0.39)] !rounded-lg">
+          <Button onClick={handleExploreClick} variant="solid" className="w-full sm:w-auto justify-center !py-3.5 !px-8 text-[15px] font-semibold !bg-primary-green hover:!bg-green-600 !text-white border-none shadow-[0_4px_14px_0_rgba(22,199,132,0.39)] !rounded-lg">
             Explore Our Products &rarr;
           </Button>
-          <Button variant="outline" className="w-full sm:w-auto justify-center !py-3.5 !px-8 text-[15px] font-semibold !text-primary-navy !border-gray-200 hover:!bg-gray-50 transition-all duration-300 !rounded-lg bg-white">
+          <Button onClick={() => navigate('/contact-ai')} variant="outline" className="w-full sm:w-auto justify-center !py-3.5 !px-8 text-[15px] font-semibold !text-primary-navy !border-gray-200 hover:!bg-gray-50 transition-all duration-300 !rounded-lg bg-white">
             Talk to Our AI Team &rarr;
           </Button>
         </motion.div>

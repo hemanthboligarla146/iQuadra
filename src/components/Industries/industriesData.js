@@ -20,7 +20,9 @@ export const industriesData = [
     tags: ["Agentic AI", "Personalization", "Inventory AI"],
     color: "text-blue-600",
     bgColor: "bg-blue-50",
-    image: imgRetail
+    image: imgRetail,
+    link: "/industries/retail",
+    extraContent: "Our Retail & eCommerce practice combines our Helix AI operations suite and Agentic systems to deliver hyper-personalized experiences. We integrate complex supply chains with smart inventory forecasting algorithms, ensuring you have the right products at the right time, minimizing stockouts and maximizing margins."
   },
   {
     id: "manufacturing",
@@ -31,7 +33,9 @@ export const industriesData = [
     tags: ["Oracle SCM", "IoT", "Quality Engineering"],
     color: "text-orange-600",
     bgColor: "bg-orange-50",
-    image: imgManufacturing
+    image: imgManufacturing,
+    link: "/industries/manufacturing",
+    extraContent: "We empower modern manufacturers by integrating edge IoT devices with Oracle Supply Chain Management. Our quality engineering frameworks automate defect detection on the assembly line, significantly reducing waste and ensuring your operations run at peak efficiency with predictive maintenance models."
   },
   {
     id: "payments",
@@ -42,7 +46,9 @@ export const industriesData = [
     tags: ["Payments QA", "Fraud AI", "APIs"],
     color: "text-purple-600",
     bgColor: "bg-purple-50",
-    image: imgPayments
+    image: imgPayments,
+    link: "/industries/payments",
+    extraContent: "iQuadra's fintech engineering team specializes in high-throughput, low-latency payment gateways. We implement advanced AI fraud detection systems that analyze transaction patterns in real-time, reducing false positives while maintaining absolute security and regulatory compliance."
   },
   {
     id: "aerospace",
@@ -53,7 +59,9 @@ export const industriesData = [
     tags: ["DO-178B", "ARP4754", "V&V"],
     color: "text-cyan-600",
     bgColor: "bg-cyan-50",
-    image: imgAerospace
+    image: imgAerospace,
+    link: "/industries/aerospace",
+    extraContent: "Our aerospace practice provides rigorous, safety-critical software engineering. We strictly adhere to DO-178C and ARP4754 standards, offering comprehensive verification and validation (V&V) services for embedded avionics systems, ensuring absolute reliability for mission-critical flight software."
   },
   {
     id: "healthcare",
@@ -64,7 +72,9 @@ export const industriesData = [
     tags: ["HIPAA", "Oracle HCM", "Compliance AI"],
     color: "text-pink-600",
     bgColor: "bg-pink-50",
-    image: imgHealthcare
+    image: imgHealthcare,
+    link: "/industries/healthcare",
+    extraContent: "We transform healthcare operations by modernizing legacy systems into HIPAA-compliant, cloud-native architectures. Our AI-driven workflows streamline patient onboarding, automate claims processing, and provide predictive analytics for hospital resource management, ultimately improving patient care."
   },
   {
     id: "utilities",
@@ -75,7 +85,9 @@ export const industriesData = [
     tags: ["Smart Grid", "IoT", "Oracle"],
     color: "text-yellow-600",
     bgColor: "bg-yellow-50",
-    image: imgUtilities
+    image: imgUtilities,
+    link: "/industries/utilities",
+    extraContent: "Drive the transition to smart grids with our massive-scale IoT data engineering. We ingest millions of telemetry data points to provide real-time operational analytics, predict infrastructure failures before they happen, and integrate seamlessly with Oracle Utilities for complete operational visibility."
   },
   {
     id: "construction",
@@ -86,7 +98,9 @@ export const industriesData = [
     tags: ["Oracle Projects", "CLM", "Workforce Management"],
     color: "text-emerald-600",
     bgColor: "bg-emerald-50",
-    image: imgConstruction
+    image: imgConstruction,
+    link: "/industries/construction",
+    extraContent: "Manage massive, multi-year construction projects with confidence. We implement Oracle Fusion Projects and advanced Contract Lifecycle Management systems to track costs, optimize subcontractor workflows, and ensure on-time delivery while maintaining strict margin control."
   },
   {
     id: "science",
@@ -97,7 +111,9 @@ export const industriesData = [
     tags: ["LIMS", "R&D AI", "Data Engineering"],
     color: "text-indigo-600",
     bgColor: "bg-indigo-50",
-    image: imgScience
+    image: imgScience,
+    link: "/industries/science",
+    extraContent: "Accelerate your R&D pipelines. We architect scalable Laboratory Information Management Systems (LIMS) and apply deep learning algorithms to vast scientific datasets, automating data extraction and accelerating the discovery phase of new scientific breakthroughs."
   },
   {
     id: "automotive",
@@ -108,6 +124,8 @@ export const industriesData = [
     tags: ["Embedded Systems", "Fleet AI", "Oracle"],
     color: "text-red-600",
     bgColor: "bg-red-50",
-    image: imgAutomotive
+    image: imgAutomotive,
+    link: "/industries/automotive",
+    extraContent: "Next-generation automotive engineering requires robust data backbones. We build AI-powered fleet management platforms that process real-time telematics for predictive maintenance, while integrating factory-floor Oracle ERP systems for seamless just-in-time manufacturing."
   }
 ];

@@ -1,16 +1,19 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { newsData } from '../../data/mockData';
+import { useNavigate } from 'react-router-dom';
 import Card from '../Common/Card';
 
 const LatestNews = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="flex flex-col h-full">
       <div className="flex justify-between items-end mb-8 border-b border-gray-100 pb-2">
         <h2 className="text-[28px] font-[700] text-primary-navy tracking-tight">Latest from iQuadra</h2>
-        <a href="#" className="text-[14px] font-[600] text-primary-green hover:underline flex items-center">
+        <button onClick={() => navigate('/news')} className="text-[14px] font-[600] text-primary-green hover:underline flex items-center">
           View All News &rarr;
-        </a>
+        </button>
       </div>
 
       <div className="flex flex-col gap-4 flex-grow">
@@ -18,6 +21,7 @@ const LatestNews = () => {
           <motion.div 
             key={index}
             whileHover={{ y: -4, transition: { duration: 0.2 } }}
+            onClick={() => navigate(`/news/${news.id}`)}
             className="group cursor-pointer h-full"
           >
             <Card className="!p-5 border border-gray-100 shadow-sm flex flex-row items-center gap-5 h-[120px] rounded-[16px]" hoverEffect={false}>
